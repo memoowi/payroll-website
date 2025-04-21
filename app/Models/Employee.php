@@ -25,4 +25,16 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeDeduction::class);
     }
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+    public function overtime()
+    {
+        return $this->hasMany(Overtime::class);
+    }
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
 }
