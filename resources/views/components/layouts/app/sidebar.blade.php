@@ -21,8 +21,8 @@
                     <flux:navlist.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
                 </flux:navlist.group>
 
-                <flux:navlist.group :heading="__('Company Configuration')" class="grid">
-                    <flux:navlist.item icon="cog-6-tooth" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Company Settings') }}</flux:navlist.item>
+                <flux:navlist.group :heading="__('Configuration')" class="grid">
+                    <flux:navlist.item icon="cog-6-tooth" :href="route('admin.company-settings')" :current="request()->routeIs('admin.company-settings')" wire:navigate>{{ __('Company Settings') }}</flux:navlist.item>
                     <flux:navlist.item icon="building-office-2" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Departments') }}</flux:navlist.item>
                     <flux:navlist.item icon="briefcase" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Positions') }}</flux:navlist.item>
                     <flux:navlist.item icon="banknotes" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Salary Components') }}</flux:navlist.item>

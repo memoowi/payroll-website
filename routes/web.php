@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CompanySettingController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -19,4 +21,9 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
+// Admin routes
+Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
+    Route::get('/company-setting', [CompanySettingController::class, 'index'])->name('company-settings');
+
+});
 require __DIR__.'/auth.php';
