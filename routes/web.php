@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\EmployeeController;
+use App\Livewire\CompanySetting;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -23,7 +24,8 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin routes
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    Route::get('/company-setting', [CompanySettingController::class, 'index'])->name('company-settings');
+    // Route::get('/company-setting', [CompanySettingController::class, 'index'])->name('company-settings');
+    Route::get('/company-setting', CompanySetting::class)->name('company-settings');
 
 });
 require __DIR__.'/auth.php';
