@@ -1,8 +1,10 @@
+<h3 style="text-align: center; color: yellow;">UNDER DEVELOPMENT</h3>
+
 # Payrollee
 
 Payrollee is a foundational web application designed for payroll management. It serves primarily as instructional material for demonstrating core web development concepts using PHP (Laravel) and related technologies.
 
-Developed by [memoowi](https://github.com/memoowi).
+Developed by [memoowi](https://instagram.com/me_moowi).
 
 Stack :
 * Laravel v12
