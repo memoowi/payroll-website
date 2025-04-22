@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class CompanyName extends Component
 {
-    public $companyName;
+    public $companyName = '';
 
     public function mount()
     {

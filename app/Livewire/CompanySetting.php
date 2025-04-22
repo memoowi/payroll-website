@@ -8,13 +8,12 @@ use Livewire\Component;
 
 class CompanySetting extends Component
 {
-    public $id;
+    public $id = '';
     public $name = '';
     public $description = '';
     public $address = '';
     public $phone = '';
     public $value = '';
-    public $message;
 
     public function mount()
     {
