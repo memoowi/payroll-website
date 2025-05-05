@@ -68,4 +68,17 @@ class DepartmentManagement extends Component
         $this->description = $departmentData->description;
         $this->modal('edit-department')->show();
     }
+    public function updateDepartment()
+    {
+        $validated = $this->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:departments,name'],
+            'description' => ['required', 'string', 'max:255'],
+        ]);
+        $departmentData = Department::find($this->selectedId);
+        $departmentData->update($validated);
+        $this->dispatch('updated-department');
+        $this->closeModal();
+        $this->modal('edit-department')->close();
+        Toaster::success('Department updated successfully');
+    }
 }
