@@ -23,6 +23,17 @@ Before you begin, ensure you have the following installed on your system:
 * Node.js and npm (or yarn)
 * A database server (e.g., MySQL, PostgreSQL, SQLite)
 
+## Important Notes
+
+If you're using `ArchLinux` or any other distro/OS that uses cutting edge version of `php` and `libxml2` like myself, you might encounter an error on `nunomaduro/termwind` package. To resolve this but not permanent, cuz it's not official release.. duh. Follow these steps after `composer install` :
+1. Open `HTMLRenderer.php` in vendor
+2. In the `parse` function, comment out the `$html` variable and replace it like so :
+   ```bash
+   # $html = '<?xml encoding="UTF-8">'.trim($html);
+    $html = '<!DOCTYPE html><html><body>' . $html . '</body></html>';
+   ```
+3. Then to continue run `php artisan package:discover --ansi`
+
 ## Getting Started
 
 Follow these steps to set up the project locally:
