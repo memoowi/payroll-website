@@ -7,6 +7,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Masmerise\Toaster\Toaster;
 
 class DepartmentManagement extends Component
 {
@@ -38,6 +39,7 @@ class DepartmentManagement extends Component
         $this->dispatch('added-department');
         $this->closeModal();
         $this->modal('add-department')->close();
+        Toaster::success('Department added successfully');
     }
     public function closeModal()
     {
@@ -50,5 +52,6 @@ class DepartmentManagement extends Component
         $this->dispatch('deleted-department');
         $this->closeModal();
         $this->modal('delete-department')->close();
+        Toaster::success('Department deleted successfully');
     }
 }
