@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\CompanySettingController;
-use App\Http\Controllers\EmployeeController;
 use App\Livewire\CompanySetting;
+use App\Livewire\DepartmentManagement;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('home');
+
+Route::redirect('/', 'dashboard')->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -24,8 +25,8 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin routes
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    // Route::get('/company-setting', [CompanySettingController::class, 'index'])->name('company-settings');
     Route::get('/company-setting', CompanySetting::class)->name('company-settings');
+    Route::get('/departments', DepartmentManagement::class)->name('department-management');
 
 });
 require __DIR__.'/auth.php';

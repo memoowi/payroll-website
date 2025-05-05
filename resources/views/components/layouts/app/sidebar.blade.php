@@ -23,7 +23,7 @@
 
                 <flux:navlist.group :heading="__('Configuration')" class="grid">
                     <flux:navlist.item icon="cog-6-tooth" :href="route('admin.company-settings')" :current="request()->routeIs('admin.company-settings')" wire:navigate>{{ __('Company Settings') }}</flux:navlist.item>
-                    <flux:navlist.item icon="building-office-2" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Departments') }}</flux:navlist.item>
+                    <flux:navlist.item icon="building-office-2" :href="route('admin.department-management')" :current="request()->routeIs('admin.department-management')" wire:navigate>{{ __('Departments') }}</flux:navlist.item>
                     <flux:navlist.item icon="briefcase" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Positions') }}</flux:navlist.item>
                     <flux:navlist.item icon="banknotes" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Salary Components') }}</flux:navlist.item>
                     <flux:navlist.item icon="document-currency-dollar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Tax Settings') }}</flux:navlist.item>
