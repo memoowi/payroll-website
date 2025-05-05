@@ -8,6 +8,7 @@
         </flux:button>
     </flux:modal.trigger>
 
+    {{-- Modal Add Department --}}
     <flux:modal wire:close="closeModal" name="add-department" class="md:w-96">
         <form wire:submit="addDepartment" class="space-y-6">
             <div>
@@ -42,35 +43,34 @@
                     <td class="px-4 py-2">{{ $department->name }}</td>
                     <td class="px-4 py-2">
                         <div class="flex items-center gap-2">
-                            <flux:button icon="pencil-square" variant="primary" type="button">
+                            <flux:button wire:click="openEditModal({{ $department->id }})" icon="pencil-square"
+                                variant="primary" type="button">
                                 {{ __('Edit') }}
                             </flux:button>
 
-                            <flux:modal.trigger name="delete-department" @click="$wire.set('selected', {{ $department }})"  >
-                                <flux:button icon="trash" variant="danger" type="button">
-                                    {{ __('Delete') }}
-                                </flux:button>
-                            </flux:modal.trigger>
-                            
+                            <flux:button
+                                wire:click="openDeleteModal('{{ $department->id }}', '{{ $department->name }}')"
+                                icon="trash" variant="danger" type="button">
+                                {{ __('Delete') }}
+                            </flux:button>
+
                         </div>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    
-    {{$departments->links()}}
+
+    {{ $departments->links() }}
 
 
     {{-- Modal Delete --}}
-        
     <flux:modal name="delete-department" class="min-w-[22rem]" wire:close="closeModal">
-        @if ($selected)
-        <div class="space-y-6">
+        <form wire:submit="deleteDepartment" class="space-y-6">
             <div>
                 <flux:heading size="lg">Delete
-                    {{ $selected['name'] }}
-                    
+                    {{ $name }}
+
                     ?
                 </flux:heading>
                 <flux:text class="mt-2">
@@ -83,9 +83,27 @@
                 <flux:modal.close>
                     <flux:button variant="ghost">Cancel</flux:button>
                 </flux:modal.close>
-                <flux:button type="submit" variant="danger" wire:click="deleteDepartment({{ $selected['id'] }})">Delete</flux:button>
+                <flux:button type="submit" variant="danger">
+                    Delete</flux:button>
             </div>
-        </div>
-        @endif 
+        </form>
+    </flux:modal>
+
+    {{-- Modal Edit Department --}}
+    <flux:modal wire:close="closeModal" name="edit-department" class="md:w-96">
+        <form wire:submit="updateDepartment" class="space-y-6">
+            <div>
+                <flux:heading size="lg">Update Department</flux:heading>
+                <flux:text class="mt-2">
+                    Update a department to the system.
+                </flux:text>
+            </div>
+            <flux:input wire:model="name" label="Name" placeholder="Department name" required />
+            <flux:textarea wire:model="description" label="Description" placeholder="Department description" />
+            <div class="flex">
+                <flux:spacer />
+                <flux:button type="submit" variant="primary">Save</flux:button>
+            </div>
+        </form>
     </flux:modal>
 </div>

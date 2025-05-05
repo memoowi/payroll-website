@@ -13,7 +13,7 @@ class DepartmentManagement extends Component
 {
     use WithPagination;
     // public $departments = [];
-    public $selected;
+    public $selectedId = '';
     public $name = '';
     public $description = '';
     #[Title('Department Management')]
@@ -45,13 +45,27 @@ class DepartmentManagement extends Component
     {
         $this->reset();
     }
-    public function deleteDepartment($departmentId)
+    public function openDeleteModal($departmentId, $departmentName)
     {
-        $departmentData = Department::find($departmentId);
+        $this->selectedId = $departmentId;
+        $this->name = $departmentName;
+        $this->modal('delete-department')->show();
+    }
+    public function deleteDepartment()
+    {
+        $departmentData = Department::find($this->selectedId);
         $departmentData->delete();
         $this->dispatch('deleted-department');
         $this->closeModal();
         $this->modal('delete-department')->close();
         Toaster::success('Department deleted successfully');
+    }
+    public function openEditModal($departmentId)
+    {
+        $departmentData = Department::find($departmentId);
+        $this->selectedId = $departmentData->id;
+        $this->name = $departmentData->name;
+        $this->description = $departmentData->description;
+        $this->modal('edit-department')->show();
     }
 }
