@@ -79,11 +79,15 @@ Follow these steps to set up the project locally:
     php artisan migrate --seed
     ```
 
-8. **Seed the database with Department and Position (optional):**
-    * If you wish to add or generate pre-made departments and positions data, that can be found in `database/seeders/DepartmentPositionSeeder.php` file.
-    * Run the seeder to populate the database with.
+8. **Seed the database with Dummy Data (optional):**
+    * If you wish to add or generate pre-made data, that can be found in `database/seeders/**Seeder.php` file.
+    * Run the seeder to populate the database by calling them seeder filenames.
     ```bash
-    php artisan db:seed --class=DepartmentPositionSeeder
+    php artisan db:seed --class=FileNameSeeder
+    ```
+    * or if you prefer to populate the database with all of the pre-made data, just open the `database/seeders/DatabaseSeeder.php` file. Then uncomment the call method under the run function. After that you can refresh the migration.
+    ```bash
+    php artisan migrate:fresh --seed
     ```
 
 9.  **Serve the application:**

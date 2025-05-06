@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
 
         // $this->call([
         //     DepartmentPositionSeeder::class,
+        //     AllowanceSeeder::class,
         // ]);
     }
 }
