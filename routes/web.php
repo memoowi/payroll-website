@@ -2,6 +2,7 @@
 
 use App\Livewire\CompanySetting;
 use App\Livewire\DepartmentManagement;
+use App\Livewire\PositionManagement;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/company-setting', CompanySetting::class)->name('company-settings');
     Route::get('/departments', DepartmentManagement::class)->name('department-management');
+    Route::get('/positions', PositionManagement::class)->name('positions');
 
 });
 require __DIR__.'/auth.php';
