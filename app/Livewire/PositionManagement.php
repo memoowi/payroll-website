@@ -21,7 +21,9 @@ class PositionManagement extends Component
     #[Title('Position Management')]
     public function render()
     {
-        return view('livewire.admin.position-management');
+        return view('livewire.admin.position-management',[
+            'positions' => Position::latest()->paginate(10)
+        ]);
     }
     public function closeModal()
     {
