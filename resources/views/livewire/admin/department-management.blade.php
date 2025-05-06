@@ -39,7 +39,7 @@
         <tbody>
             @foreach ($departments as $department)
                 <tr class="text-sm border-b border-neutral-500 hover:bg-gray-50/5">
-                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                    <td class="px-4 py-2">{{ $loop->iteration + ($departments->currentPage() - 1) * $departments->perPage() }}</td>
                     <td class="px-4 py-2">{{ $department->name }}</td>
                     <td class="px-4 py-2">
                         <div class="flex items-center gap-2">

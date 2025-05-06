@@ -21,7 +21,7 @@
         <tbody>
             @foreach ($positions as $position)
                 <tr class="text-sm border-b border-neutral-500 hover:bg-gray-50/5">
-                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                    <td class="px-4 py-2">{{ $loop->iteration + ($positions->currentPage() - 1) * $positions->perPage() }}</td>
                     <td class="px-4 py-2">{{ $position->name }}</td>
                     <td class="px-4 py-2">{{ $position->department->name }}</td>
                     <td class="px-4 py-2">
