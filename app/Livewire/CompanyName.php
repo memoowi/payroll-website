@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\CompanySetting;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CompanyName extends Component
@@ -11,7 +12,7 @@ class CompanyName extends Component
 
     public function mount()
     {
-        $this->companyName = CompanySetting::first()->name;
+        $this->getCompanyName();
     }
     public function render()
     {
@@ -20,5 +21,10 @@ class CompanyName extends Component
            {{ $this->companyName}}
         </span>
         HTML;
+    }
+    #[On('updated-company-setting')]
+    public function getCompanyName()
+    {
+        $this->companyName = CompanySetting::first()->name;
     }
 }

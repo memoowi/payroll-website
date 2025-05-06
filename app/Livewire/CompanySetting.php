@@ -54,7 +54,7 @@ class CompanySetting extends Component
             ]
         );
 
-        $this->dispatch('success');
+        $this->dispatch('updated-company-setting');
     }
     public function resetFields()
     {

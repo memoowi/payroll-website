@@ -17,7 +17,7 @@
                 <flux:button variant="primary" type="submit" class="w-full">{{ __('Save') }}</flux:button>
             </div>
 
-            <x-action-message class="me-3" on="success">
+            <x-action-message class="me-3" on="updated-company-setting">
                 {{ __('Saved.') }}
             </x-action-message>
         </div>
