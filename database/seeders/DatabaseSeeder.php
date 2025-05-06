@@ -30,5 +30,9 @@ class DatabaseSeeder extends Seeder
             'phone' => '088232220652',
             'value' => 'Bersama Membangun Indonesia',
         ]);
+
+        // $this->call([
+        //     DepartmentPositionSeeder::class,
+        // ]);
     }
 }
