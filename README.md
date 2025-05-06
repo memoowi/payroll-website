@@ -72,17 +72,18 @@ Follow these steps to set up the project locally:
 6.  **Configure your database:**
     Open the `.env` file you created in step 4 and update the `DB_*` variables (e.g., `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) to match your local database setup. Ensure the specified database exists.
 
-7.  **Run database migrations:**
-    This will create the necessary tables in your database.
+7.  **Run database migrations and make the initial data needed:**
+    * This will create the necessary tables in your database. 
+    * Also If you wish to customize the default administrator credentials or initial company settings, edit the `database/seeders/DatabaseSeeder.php` file before proceeding.
     ```bash
-    php artisan migrate
+    php artisan migrate --seed
     ```
 
-8.  **Seed the database (Optional Customization):**
-    * If you wish to customize the default administrator credentials or initial company settings, edit the `database/seeders/DatabaseSeeder.php` file before proceeding.
-    * Run the seeder to populate the database with initial data, including the default administrator account and company settings.
+8. **Seed the database with Department and Position (optional):**
+    * If you wish to add or generate pre-made departments and positions data, that can be found in `database/seeders/DepartmentPositionSeeder.php` file.
+    * Run the seeder to populate the database with.
     ```bash
-    php artisan db:seed
+    php artisan db:seed --class=DepartmentPositionSeeder
     ```
 
 9.  **Serve the application:**
@@ -90,7 +91,6 @@ Follow these steps to set up the project locally:
     ```bash
     composer run dev
     ```
-
     You should now be able to access the application in your web browser, typically at `http://127.0.0.1:8000`.
 
 ## Usage
