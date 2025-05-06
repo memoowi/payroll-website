@@ -6,10 +6,12 @@ use App\Models\Department;
 use App\Models\Position;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Masmerise\Toaster\Toaster;
 
 class PositionManagement extends Component
 {
+    use WithPagination;
     public $name = '';
     public $description = '';
     public $selectedDepartmentId = '';
@@ -47,6 +49,7 @@ class PositionManagement extends Component
         $this->closeModal();
         $this->modal('position')->close();
         Toaster::success('Position added successfully');
+        $this->resetPage();
     }
     public function openEditModal($positionId)
     {
@@ -75,5 +78,20 @@ class PositionManagement extends Component
         $this->closeModal();
         $this->modal('position')->close();
         Toaster::success('Position updated successfully');
+    }
+    public function openDeleteModal($positionId, $positionName)
+    {
+        $this->selectedId = $positionId;
+        $this->name = $positionName;
+        $this->modal('delete-position')->show();
+    }
+    public function deletePosition()
+    {
+        $positionData = Position::find($this->selectedId);
+        $positionData->delete();
+        $this->closeModal();
+        $this->modal('delete-position')->close();
+        Toaster::success('Position deleted successfully');
+        $this->resetPage();
     }
 }
