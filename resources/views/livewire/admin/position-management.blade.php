@@ -2,7 +2,7 @@
     <x-page-heading headingText="Position Management" descText="Manage your positions" />
 
     {{-- Add Positions --}}
-    <flux:modal.trigger name="add-position">
+    <flux:modal.trigger name="position">
         <flux:button icon="plus" variant="primary" type="button" class="w-fit">
             {{ __('Add Positions') }}
         </flux:button>
@@ -47,12 +47,16 @@
     {{ $positions->links() }}
 
     {{-- Modal Add / Edit Positions --}}
-    <flux:modal wire:close="closeModal" name="add-position" class="md:w-96">
-        <form wire:submit="addPosition" class="space-y-6">
+    <flux:modal wire:close="closeModal" name="position" class="md:w-96">
+        <form @if($isEditting) wire:submit="updatePosition" @else wire:submit="addPosition" @endif class="space-y-6">
             <div>
-                <flux:heading size="lg">New Position</flux:heading>
+                <flux:heading size="lg">@if($isEditting) Edit @else New @endif Position</flux:heading>
                 <flux:text class="mt-2">
+                    @if ($isEditting)
+                    Update a position to the system.
+                    @else
                     Add a new position to the system.
+                    @endif
                 </flux:text>
             </div>
             <flux:input wire:model="name" label="Name" placeholder="Position name" required />

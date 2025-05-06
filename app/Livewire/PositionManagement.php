@@ -14,6 +14,8 @@ class PositionManagement extends Component
     public $description = '';
     public $selectedDepartmentId = '';
     public $departments = [];
+    public $isEditting = false;
+    public $selectedId = '';
     public function mount()
     {
         $this->departments = Department::all();
@@ -27,7 +29,7 @@ class PositionManagement extends Component
     }
     public function closeModal()
     {
-        $this->reset();
+        $this->reset(['name', 'description', 'selectedDepartmentId','selectedId','isEditting']);
     }
     public function addPosition()
     {
@@ -43,7 +45,35 @@ class PositionManagement extends Component
             'department_id' => $validated['selectedDepartmentId'],
         ]);
         $this->closeModal();
-        $this->modal('add-position')->close();
+        $this->modal('position')->close();
         Toaster::success('Position added successfully');
+    }
+    public function openEditModal($positionId)
+    {
+        $positionData = Position::find($positionId);
+        $this->selectedId = $positionData->id;
+        $this->name = $positionData->name;
+        $this->description = $positionData->description;
+        $this->selectedDepartmentId = $positionData->department_id;
+        $this->isEditting = true;
+        $this->modal('position')->show();
+    }
+    public function updatePosition()
+    {
+        $validated = $this->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:positions,name'],
+            'description' => ['required', 'string', 'max:255'],
+            'selectedDepartmentId' => ['required', 'exists:departments,id'],
+        ]);
+
+        $positionData = Position::find($this->selectedId);
+        $positionData->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'department_id' => $validated['selectedDepartmentId'],
+        ]);
+        $this->closeModal();
+        $this->modal('position')->close();
+        Toaster::success('Position updated successfully');
     }
 }
