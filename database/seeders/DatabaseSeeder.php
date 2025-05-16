@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         //     DepartmentPositionSeeder::class,
         //     AllowanceSeeder::class,
         //     DeductionSeeder::class,
+        //     TaxSeeder::class,
         // ]);
     }
 }
