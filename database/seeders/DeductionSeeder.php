@@ -30,14 +30,34 @@ class DeductionSeeder extends Seeder
                 'amount' => 250000,
             ],
             [
-                'name' => 'Loan Repayment',
-                'description' => 'Monthly repayment deduction for company loans.',
-                'amount' => 150000,
-            ],
-            [
                 'name' => 'Social Security Contribution',
                 'description' => 'Mandatory employee contribution to BPJS Ketenagakerjaan.',
                 'amount' => 100000,
+            ],
+            [
+                'name' => 'Violation of Dress Code',
+                'description' => 'Deduction for not following office dress code policies.',
+                'amount' => 25000,
+            ],
+            [
+                'name' => 'Company Event No-show',
+                'description' => 'Deduction for not attending a mandatory company event.',
+                'amount' => 50000,
+            ],
+            [
+                'name' => 'Office Supplies Misuse',
+                'description' => 'Deduction for misusing or losing office supplies.',
+                'amount' => 40000,
+            ],
+            [
+                'name' => 'Unapproved Leave',
+                'description' => 'Deduction for taking leave without prior approval.',
+                'amount' => 60000,
+            ],
+            [
+                'name' => 'Poor Performance',
+                'description' => 'Deduction for not meeting performance targets.',
+                'amount' => 150000,
             ],
         ];
 
