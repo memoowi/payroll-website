@@ -12,7 +12,10 @@ class Employee extends Model
     {
         return $this->hasOne(User::class, 'employee_id', 'id');
     }
-
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
     public function salary()
     {
         return $this->hasOne(Salary::class);

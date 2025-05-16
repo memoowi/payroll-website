@@ -14,11 +14,11 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Employee Management') }}</flux:navlist.item>
-                    <flux:navlist.item icon="circle-stack" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Payroll') }}</flux:navlist.item>
-                    <flux:navlist.item icon="calendar-date-range" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('TIme & Attendance') }}</flux:navlist.item>
-                    <flux:navlist.item icon="inbox-arrow-down" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Leave Management') }}</flux:navlist.item>
-                    <flux:navlist.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('admin.employee-management')" :current="request()->routeIs('admin.employee-management')" wire:navigate>{{ __('Employee Management') }}</flux:navlist.item>
+                    <flux:navlist.item icon="circle-stack" :href="route('admin.payrolls')" :current="request()->routeIs('admin.payrolls')" wire:navigate>{{ __('Payroll') }}</flux:navlist.item>
+                    <flux:navlist.item icon="calendar-date-range" :href="route('admin.time-attendances')" :current="request()->routeIs('admin.time-attendances')" wire:navigate>{{ __('TIme & Attendance') }}</flux:navlist.item>
+                    <flux:navlist.item icon="inbox-arrow-down" :href="route('admin.leave-management')" :current="request()->routeIs('admin.leave-management')" wire:navigate>{{ __('Leave Management') }}</flux:navlist.item>
+                    <flux:navlist.item icon="clipboard-document-list" :href="route('admin.reports')" :current="request()->routeIs('admin.reports')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
                 </flux:navlist.group>
 
                 <flux:navlist.group :heading="__('Configuration')" class="grid">
