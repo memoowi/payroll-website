@@ -50,7 +50,7 @@
 
     {{$allowances->links()}}
 
-    {{-- Modal Add and Edit Allowance --}}
+    {{-- Main Modal Add and Edit --}}
     <flux:modal wire:close="closeModal" name="main-modal" class="md:w-96">
         <form 
             @if ($modalType == 'allowance')
@@ -191,4 +191,7 @@
             @endforeach
         </tbody>
     </table>
+
+    {{$deductions->links()}}
+
 </div>
