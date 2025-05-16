@@ -4,6 +4,7 @@ use App\Livewire\CompanySetting;
 use App\Livewire\DepartmentManagement;
 use App\Livewire\PositionManagement;
 use App\Livewire\SalaryComponent;
+use App\Livewire\TaxSetting;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/departments', DepartmentManagement::class)->name('department-management');
     Route::get('/positions', PositionManagement::class)->name('positions');
     Route::get('/salary-components', SalaryComponent::class)->name('salary-components');
+    Route::get('/tax-settings', TaxSetting::class)->name('tax-settings');
 
 });
 require __DIR__.'/auth.php';

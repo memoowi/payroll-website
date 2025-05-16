@@ -26,7 +26,7 @@
                     <flux:navlist.item icon="building-office-2" :href="route('admin.department-management')" :current="request()->routeIs('admin.department-management')" wire:navigate>{{ __('Departments') }}</flux:navlist.item>
                     <flux:navlist.item icon="briefcase" :href="route('admin.positions')" :current="request()->routeIs('admin.positions')" wire:navigate>{{ __('Positions') }}</flux:navlist.item>
                     <flux:navlist.item icon="banknotes" :href="route('admin.salary-components')" :current="request()->routeIs('admin.salary-components')" wire:navigate>{{ __('Salary Components') }}</flux:navlist.item>
-                    <flux:navlist.item icon="document-currency-dollar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Tax Settings') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-currency-dollar" :href="route('admin.tax-settings')" :current="request()->routeIs('admin.tax-settings')" wire:navigate>{{ __('Tax Settings') }}</flux:navlist.item>
                 </flux:navlist.group>
 
             </flux:navlist>
