@@ -189,10 +189,40 @@ class EmployeeManagement extends Component
                 Toaster::success('Employee created successfully');
                 $this->modal('main-modal')->close();
                 $this->closeModal();
+                $this->resetPage();
             } catch (\Exception $e) {
                 DB::rollBack();
                 Toaster::error('Failed to create employee. Please try again.');
                 throw $e;
+            }
+        }
+    }
+    public function openDeleteModal($employeeId, $employeeName)
+    {
+        $this->employeeId = $employeeId;
+        $this->fullName = $employeeName;
+        $this->modal('delete-modal')->show();
+    }
+    public function delete()
+    {
+        $employee = Employee::find($this->employeeId);
+        if ($employee) {
+            DB::beginTransaction();
+            try {
+                $user = $employee->user;
+                if ($user) {
+                    $user->delete();
+                }
+                $employee->salary()->delete();
+                $employee->delete();
+                DB::commit();
+                Toaster::success('Employee deleted successfully');
+                $this->modal('delete-modal')->close();
+                $this->closeModal();
+                $this->resetPage();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Toaster::error('Failed to delete employee. Please try again.');
             }
         }
     }

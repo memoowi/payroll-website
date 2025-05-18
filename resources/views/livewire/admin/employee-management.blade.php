@@ -7,60 +7,62 @@
         </flux:button>
     </flux:modal.trigger>
 
-    <table class="w-full table-auto border-collapse">
-        <thead>
-            <tr class="text-left text-sm uppercase font-bold border-b">
-                <th class="p-4 w-12">{{ __('No') }}</th>
-                <th class="p-4">{{ __('Full Name') }}</th>
-                <th class="p-4">{{ __('Hire Date') }}</th>
-                <th class="p-4">{{ __('Department & Position') }}</th>
-                <th class="p-4">{{ __('Base Salary') }}</th>
-                <th class="p-4">{{ __('Actions') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($employees as $employee)
-                <tr class="border-b hover:bg-gray-50/5">
-                    <td class="px-4 py-2">
-                        {{ $loop->iteration + ($employees->currentPage() - 1) * $employees->perPage() }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ $employee->full_name }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ \Carbon\Carbon::parse($employee->hire_date)->format('d M Y') }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ $employee->position->department->name }} - {{ $employee->position->name }}
-                    </td>
-                    <td class="px-4 py-2">
-                        Rp {{ number_format($employee->salary->amount, 0, ',', '.') }}
-                    </td>
-                    <td class="px-4 py-2">
-                        <div class="flex items-center gap-2">
-                            <flux:button wire:click="openModal('view', {{ $employee->id }})" icon="eye" variant="primary" type="button">
-                                {{ __('View') }}
-                            </flux:button>
-                            <flux:button wire:click="openModal('edit', {{ $employee->id }})" icon="pencil-square"
-                                variant="primary" type="button">
-                                {{ __('Edit') }}
-                            </flux:button>
-                            <flux:button wire:click="openDeleteModal('{{ $employee->id }}', '{{ $employee->full_name }}')" icon="trash" variant="danger" type="button">
-                                {{ __('Delete') }}
-                            </flux:button>
-                        </div>
-                    </td>
+    <div class="w-full overflow-x-auto">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="text-left text-sm uppercase font-bold border-b">
+                    <th class="p-4 w-12">{{ __('No') }}</th>
+                    <th class="p-4">{{ __('Full Name') }}</th>
+                    <th class="p-4">{{ __('Hire Date') }}</th>
+                    <th class="p-4">{{ __('Department & Position') }}</th>
+                    <th class="p-4">{{ __('Base Salary') }}</th>
+                    <th class="p-4">{{ __('Actions') }}</th>
                 </tr>
-            @endforeach
-            @if ($employees->isEmpty())
-                <tr>
-                    <td colspan="6" class="text-center p-4">
-                        {{ __('No employees found.') }}
-                    </td>
-                </tr>
-            @endif
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($employees as $employee)
+                    <tr class="border-b hover:bg-gray-50/5">
+                        <td class="px-4 py-2">
+                            {{ $loop->iteration + ($employees->currentPage() - 1) * $employees->perPage() }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ $employee->full_name }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ \Carbon\Carbon::parse($employee->hire_date)->format('d M Y') }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ $employee->position->department->name }} - {{ $employee->position->name }}
+                        </td>
+                        <td class="px-4 py-2">
+                            Rp {{ number_format($employee->salary->amount, 0, ',', '.') }}
+                        </td>
+                        <td class="px-4 py-2">
+                            <div class="flex items-center gap-2">
+                                <flux:button wire:click="openModal('view', {{ $employee->id }})" icon="eye" variant="primary" type="button">
+                                    {{ __('View') }}
+                                </flux:button>
+                                <flux:button wire:click="openModal('edit', {{ $employee->id }})" icon="pencil-square"
+                                    variant="primary" type="button">
+                                    {{ __('Edit') }}
+                                </flux:button>
+                                <flux:button wire:click="openDeleteModal('{{ $employee->id }}', '{{ $employee->full_name }}')" icon="trash" variant="danger" type="button">
+                                    {{ __('Delete') }}
+                                </flux:button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                @if ($employees->isEmpty())
+                    <tr>
+                        <td colspan="6" class="text-center p-4">
+                            {{ __('No employees found.') }}
+                        </td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
 
     {{ $employees->links() }}
 
@@ -86,7 +88,11 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <flux:input wire:model="email" label="Email" placeholder="Email" required />
-                <flux:input wire:model="password" label="Password" placeholder="Password" type="password" required />
+                @if ($isEditting)
+                    <flux:input wire:model="password" label="Password" placeholder="Password" type="password" required disabled />
+                @else
+                    <flux:input wire:model="password" label="Password" placeholder="Password" type="password" required />
+                @endif
             </div>
 
             <flux:separator />
@@ -131,4 +137,29 @@
         </form>
     </flux:modal>
 
+    {{-- Modal Delete --}}
+    <flux:modal name="delete-modal" class="min-w-[22rem]" wire:close="closeModal">
+        <form 
+            wire:submit="delete"
+        class="space-y-6">
+            <div>
+                <flux:heading size="lg">Delete
+                    {{ $fullName }}
+                    ?
+                </flux:heading>
+                <flux:text class="mt-2">
+                    <p>You're about to delete this employee.</p>
+                    <p>This action cannot be reversed.</p>
+                </flux:text>
+            </div>
+            <div class="flex gap-2">
+                <flux:spacer />
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancel</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" variant="danger">
+                    Delete</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>
