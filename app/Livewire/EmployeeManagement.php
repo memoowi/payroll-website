@@ -57,7 +57,7 @@ class EmployeeManagement extends Component
     public function openModal($modalType, $employeeId = null)
     {
         $this->isEditting = $modalType === 'edit';
-        if ($this->isEditting) {
+        if ($this->isEditting || $modalType === 'view') {
             $this->employeeId = $employeeId;
             $employee = Employee::find($employeeId);
             if ($employee) {
@@ -79,6 +79,10 @@ class EmployeeManagement extends Component
                 $this->payFrequency = $employee->salary->pay_frequency;
                 $this->effectiveDate = $employee->salary->effective_date;
             }
+        }
+        if ($modalType === 'view') {
+            $this->modal('view-modal')->show();
+            return;
         }
         $this->modal('main-modal')->show();
     }

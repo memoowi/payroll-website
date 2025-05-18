@@ -39,7 +39,7 @@
                         </td>
                         <td class="px-4 py-2">
                             <div class="flex items-center gap-2">
-                                <flux:button wire:click="openModal('view', {{ $employee->id }})" icon="eye" variant="primary" type="button">
+                                <flux:button wire:click="openModal('view', {{ $employee->id }})" icon="eye" variant="filled" type="button">
                                     {{ __('View') }}
                                 </flux:button>
                                 <flux:button wire:click="openModal('edit', {{ $employee->id }})" icon="pencil-square"
@@ -161,5 +161,44 @@
                     Delete</flux:button>
             </div>
         </form>
+    </flux:modal>
+
+    {{-- View Modal --}}
+    <flux:modal wire:close="closeModal" name="view-modal" class="w-full md:min-w-3/4">
+        <div class="space-y-6">
+            <div class="flex flex-col gap-2">
+                <flux:heading size="lg">Employee Details</flux:heading>
+                <flux:description class="text-sm">
+                    <p>Details of {{ $fullName }}</p>
+                    <p>
+                        This is the information you provided when registering this employee. Make sure to keep it up to date.
+                    </p>
+                </flux:description>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <flux:input wire:model="email" label="Email" placeholder="Email" disabled />
+                <flux:input wire:model="fullName" label="Full Name" placeholder="Full Name" disabled />
+                <flux:input wire:model="address" label="Address" placeholder="Address" disabled />
+                <flux:input wire:model="phone" label="Phone" placeholder="Phone" type="tel" disabled />
+                <flux:input wire:model="hireDate" label="Hire Date" placeholder="Hire Date" type="date" disabled />
+                <flux:select label="Department" wire:model="selectedDepartmentId" wire:change="updatePositions" placeholder="Choose department..."
+                    disabled>
+                    @foreach ($departments as $department)
+                        <flux:select.option value="{{ $department->id }}">{{ $department->name }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <flux:select label="Position" wire:model="selectedPositionId" placeholder="Choose position..." disabled>
+                    @foreach ($positions as $position)
+                        <flux:select.option value="{{ $position->id }}">{{ $position->name }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <flux:input wire:model="bankName" label="Bank Name" placeholder="Bank Name" disabled />
+                <flux:input wire:model="bankAccount" label="Bank Account" placeholder="Bank Account" disabled />
+                <flux:input wire:model="npwp" label="NPWP" placeholder="NPWP" disabled />
+                <flux:input wire:model="salary" label="Base Salary" placeholder="Base Salary" type="number" min="0" disabled />
+                <flux:input wire:model="payFrequency" label="Pay Frequency" placeholder="Pay Frequency" disabled />
+                <flux:input wire:model="effectiveDate" label="Effective Date" placeholder="Effective Date" type="date" disabled />
+            </div>
+        </div>
     </flux:modal>
 </div>
