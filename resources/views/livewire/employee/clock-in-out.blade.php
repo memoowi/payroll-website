@@ -24,7 +24,7 @@
             @if ($todayAttendance)
                 @if ($todayAttendance->check_in)
                     <span class="text-green-500">
-                        {{ __("You'vee Clocked In Today") }}
+                        {{ __("You've Clocked In Today") }}
                     </span>
                 @else
                     <span class="text-red-500">
