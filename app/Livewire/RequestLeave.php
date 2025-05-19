@@ -17,6 +17,7 @@ class RequestLeave extends Component
     public $startDate = '';
     public $endDate = '';
     public $reason = '';
+    public $leaveRequestData = null;
     public function render()
     {
         return view('livewire.employee.request-leave', [
@@ -95,5 +96,20 @@ class RequestLeave extends Component
         $this->modal('delete-modal')->close();
         $this->closeModal();
         $this->resetPage();
+    }
+    public function openViewModal($id)
+    {
+        $data = LeaveRequest::find($id);
+        if(!$data) {
+            Toaster::error('Leave request not found.');
+            return;
+        }
+        // $this->leaveRequestId = $data->id;
+        // $this->leaveType = $data->leave_type;
+        // $this->startDate = $data->start_date;
+        // $this->endDate = $data->end_date;
+        // $this->reason = $data->reason;
+        $this->leaveRequestData = $data;
+        $this->modal('view-modal')->show();
     }
 }
