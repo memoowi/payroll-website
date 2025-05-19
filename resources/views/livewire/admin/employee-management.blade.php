@@ -32,7 +32,10 @@
                             {{ \Carbon\Carbon::parse($employee->hire_date)->format('d M Y') }}
                         </td>
                         <td class="px-4 py-2">
-                            {{ $employee->position->department->name }} - {{ $employee->position->name }}
+                            {{ $employee->position->name }}
+                            <flux:text size="sm">
+                                {{ $employee->position->department->name }} Dept.
+                            </flux:text>
                         </td>
                         <td class="px-4 py-2">
                             Rp {{ number_format($employee->salary->amount, 0, ',', '.') }}
