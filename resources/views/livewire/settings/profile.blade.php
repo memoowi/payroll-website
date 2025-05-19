@@ -47,6 +47,12 @@ new class extends Component {
 
         $user->save();
 
+        if ($user->employee()) {
+            $user->employee()->update([
+                'full_name' => $this->name,
+            ]);
+        }
+
         $this->dispatch('profile-updated', name: $user->name);
     }
 
