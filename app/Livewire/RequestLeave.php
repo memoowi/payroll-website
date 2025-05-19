@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\LeaveRequest;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Masmerise\Toaster\Toaster;
@@ -18,6 +19,7 @@ class RequestLeave extends Component
     public $endDate = '';
     public $reason = '';
     public $leaveRequestData = null;
+    #[Title('Request Leave')]
     public function render()
     {
         return view('livewire.employee.request-leave', [
