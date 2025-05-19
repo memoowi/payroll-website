@@ -156,6 +156,7 @@
         <flux:text class="mt-2">
             Here's the details of your leave request.
         </flux:text>
+        <flux:separator class="my-4" />
 
         @if ($leaveRequestData)
             <div class="mt-4 space-y-2">

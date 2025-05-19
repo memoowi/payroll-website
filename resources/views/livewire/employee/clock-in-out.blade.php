@@ -22,13 +22,13 @@
         </h3>
         <p class="text-sm text-neutral-500 dark:text-neutral-400">
             @if ($todayAttendance)
-                @if ($todayAttendance->check_in)
-                    <span class="text-green-500">
-                        {{ __("You've Clocked In Today") }}
-                    </span>
-                @else
+                @if ($todayAttendance->check_out)
                     <span class="text-red-500">
                         {{ __("You've Clocked Out Today") }}
+                    </span>
+                @elseif ($todayAttendance->check_in)
+                    <span class="text-green-500">
+                        {{ __("You've Clocked In Today") }}
                     </span>
                 @endif
             @else
