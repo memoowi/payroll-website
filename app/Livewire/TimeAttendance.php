@@ -3,12 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\Attendance;
+use App\Models\Employee;
 use App\Models\Overtime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Masmerise\Toaster\Toaster;
 
 class TimeAttendance extends Component
 {
@@ -77,13 +79,102 @@ class TimeAttendance extends Component
 
         $attendances = $attendancesQuery->orderBy('attendance_date', 'desc')->paginate(5, ['*'], 'attendancesPage');
 
-        $overtimes = Overtime::latest()->paginate(10, ['*'], 'overtimesPage');
+        $overtimes = Overtime::latest()->paginate(5, ['*'], 'overtimesPage');
+        $employees = Employee::latest()->get();
 
         return view('livewire.admin.time-attendance', [
             'attendances' => $attendances,
             'overtimes' => $overtimes,
             'monthLinks' => $this->monthLinks,
             'selectedYearMonthFilter' => $this->selectedYearMonth, 
+            'employees' => $employees
         ]);
+    }
+    
+
+    // Overtimes
+    public $isEditting = false;
+    public $selectedEmployeeId = '';
+    public $overtimeDate = '';
+    public $startTime = '';
+    public $endTime = '';
+    public $reason = '';
+    public $overtimeId = '';
+    public function openOvertimeModal($selectedId = null)
+    {
+        if ($selectedId) {
+            $this->isEditting = true;
+            $overtime = Overtime::find($selectedId);
+            $this->selectedEmployeeId = $overtime->employee_id;
+            $this->overtimeDate = $overtime->overtime_date;
+            $this->startTime = Carbon::parse($overtime->start_time)->format('H:i');
+            $this->endTime = Carbon::parse($overtime->end_time)->format('H:i');
+            $this->reason = $overtime->reason;
+            $this->overtimeId = $overtime->id;
+        } else {
+            $this->isEditting = false;
+        }
+        $this->modal('overtime-modal')->show();
+    }
+    public function closeModal()
+    {
+        $this->reset([
+            'isEditting',
+            'selectedEmployeeId',
+            'overtimeDate',
+            'startTime',
+            'endTime',
+            'reason',
+            'overtimeId'
+        ]);
+    }
+    public function save()
+    {
+        $this->validate([
+            'selectedEmployeeId' => 'required|exists:employees,id',
+            'overtimeDate' => 'required|date',
+            'startTime' => 'required|date_format:H:i',
+            'endTime' => 'required|date_format:H:i|after:startTime',
+            'reason' => 'required|string',
+        ]);
+        $duration = abs(Carbon::parse($this->endTime)->diffInMinutes(Carbon::parse($this->startTime)));
+        if ($this->isEditting) {
+            $overtime = Overtime::find($this->overtimeId);
+            $overtime->update([
+                'employee_id' => $this->selectedEmployeeId,
+                'overtime_date' => $this->overtimeDate,
+                'start_time' => $this->startTime,
+                'end_time' => $this->endTime,
+                'duration' => $duration,
+                'reason' => $this->reason,
+            ]);
+        } else {
+            Overtime::create([
+                'employee_id' => $this->selectedEmployeeId,
+                'overtime_date' => $this->overtimeDate,
+                'start_time' => $this->startTime,
+                'end_time' => $this->endTime,
+                'duration' => $duration,
+                'reason' => $this->reason,
+            ]);
+        }
+        Toaster::success('Overtime saved successfully!');
+        $this->modal('overtime-modal')->close();
+        $this->closeModal();
+        $this->resetPage('overtimesPage');
+    }
+    public function openDeleteOvertimeModal($selectedId)
+    {
+        $this->overtimeId = $selectedId;
+        $this->modal('delete-modal')->show();
+    }
+    public function deleteOvertime()
+    {
+        $overtime = Overtime::find($this->overtimeId);
+        $overtime->delete();
+        Toaster::success('Overtime deleted successfully!');
+        $this->modal('delete-modal')->close();
+        $this->closeModal();
+        $this->resetPage('overtimesPage');
     }
 }
