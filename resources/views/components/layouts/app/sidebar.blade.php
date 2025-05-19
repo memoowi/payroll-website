@@ -21,6 +21,8 @@
                         <flux:navlist.item icon="calendar-date-range" :href="route('admin.time-attendances')" :current="request()->routeIs('admin.time-attendances')" wire:navigate>{{ __('TIme & Attendance') }}</flux:navlist.item>
                         <flux:navlist.item icon="inbox-arrow-down" :href="route('admin.leave-management')" :current="request()->routeIs('admin.leave-management')" wire:navigate>{{ __('Leave Management') }}</flux:navlist.item>
                         <flux:navlist.item icon="clipboard-document-list" :href="route('admin.reports')" :current="request()->routeIs('admin.reports')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
+                    @else
+                        <flux:navlist.item icon="arrow-up-on-square-stack" :href="route('employee.request-leave')" :current="request()->routeIs('employee.request-leave')" wire:navigate>{{ __('Request Leave') }}</flux:navlist.item>
                     @endif
                 </flux:navlist.group>
 

@@ -7,6 +7,7 @@ use App\Livewire\LeaveManagement;
 use App\Livewire\Payroll;
 use App\Livewire\PositionManagement;
 use App\Livewire\Report;
+use App\Livewire\RequestLeave;
 use App\Livewire\SalaryComponent;
 use App\Livewire\TaxSetting;
 use App\Livewire\TimeAttendance;
@@ -32,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin routes
-Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
     Route::get('/company-setting', CompanySetting::class)->name('company-settings');
     Route::get('/departments', DepartmentManagement::class)->name('department-management');
     Route::get('/positions', PositionManagement::class)->name('positions');
@@ -46,4 +47,10 @@ Route::middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/reports', Report::class)->name('reports');
 
 });
+
+// Employee routes
+Route::middleware(['auth', 'role:employee'])->name('employee.')->group(function () {
+    Route::get('/request-leave', RequestLeave::class)->name('request-leave');
+});
+
 require __DIR__.'/auth.php';
