@@ -28,7 +28,7 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeDeduction::class);
     }
-    public function attendance()
+    public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }

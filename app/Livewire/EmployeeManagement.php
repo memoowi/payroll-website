@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Masmerise\Toaster\Toaster;
@@ -36,6 +37,7 @@ class EmployeeManagement extends Component
     {
         $this->hireDate = now()->format('Y-m-d');
     }
+    #[Title('Employee Management')]
     public function render()
     {
         return view('livewire.admin.employee-management', [

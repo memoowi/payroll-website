@@ -14,20 +14,25 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('admin.employee-management')" :current="request()->routeIs('admin.employee-management')" wire:navigate>{{ __('Employee Management') }}</flux:navlist.item>
-                    <flux:navlist.item icon="circle-stack" :href="route('admin.payrolls')" :current="request()->routeIs('admin.payrolls')" wire:navigate>{{ __('Payroll') }}</flux:navlist.item>
-                    <flux:navlist.item icon="calendar-date-range" :href="route('admin.time-attendances')" :current="request()->routeIs('admin.time-attendances')" wire:navigate>{{ __('TIme & Attendance') }}</flux:navlist.item>
-                    <flux:navlist.item icon="inbox-arrow-down" :href="route('admin.leave-management')" :current="request()->routeIs('admin.leave-management')" wire:navigate>{{ __('Leave Management') }}</flux:navlist.item>
-                    <flux:navlist.item icon="clipboard-document-list" :href="route('admin.reports')" :current="request()->routeIs('admin.reports')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
+                    
+                    @if (Auth::user()->role == 'admin' )
+                        <flux:navlist.item icon="user-group" :href="route('admin.employee-management')" :current="request()->routeIs('admin.employee-management')" wire:navigate>{{ __('Employee Management') }}</flux:navlist.item>
+                        <flux:navlist.item icon="circle-stack" :href="route('admin.payrolls')" :current="request()->routeIs('admin.payrolls')" wire:navigate>{{ __('Payroll') }}</flux:navlist.item>
+                        <flux:navlist.item icon="calendar-date-range" :href="route('admin.time-attendances')" :current="request()->routeIs('admin.time-attendances')" wire:navigate>{{ __('TIme & Attendance') }}</flux:navlist.item>
+                        <flux:navlist.item icon="inbox-arrow-down" :href="route('admin.leave-management')" :current="request()->routeIs('admin.leave-management')" wire:navigate>{{ __('Leave Management') }}</flux:navlist.item>
+                        <flux:navlist.item icon="clipboard-document-list" :href="route('admin.reports')" :current="request()->routeIs('admin.reports')" wire:navigate>{{ __('Reports') }}</flux:navlist.item>
+                    @endif
                 </flux:navlist.group>
 
+                @if (Auth::user()->role == 'admin' )
                 <flux:navlist.group :heading="__('Configuration')" class="grid">
                     <flux:navlist.item icon="cog-6-tooth" :href="route('admin.company-settings')" :current="request()->routeIs('admin.company-settings')" wire:navigate>{{ __('Company Settings') }}</flux:navlist.item>
                     <flux:navlist.item icon="building-office-2" :href="route('admin.department-management')" :current="request()->routeIs('admin.department-management')" wire:navigate>{{ __('Departments') }}</flux:navlist.item>
                     <flux:navlist.item icon="briefcase" :href="route('admin.positions')" :current="request()->routeIs('admin.positions')" wire:navigate>{{ __('Positions') }}</flux:navlist.item>
                     <flux:navlist.item icon="banknotes" :href="route('admin.salary-components')" :current="request()->routeIs('admin.salary-components')" wire:navigate>{{ __('Salary Components') }}</flux:navlist.item>
                     <flux:navlist.item icon="document-currency-dollar" :href="route('admin.tax-settings')" :current="request()->routeIs('admin.tax-settings')" wire:navigate>{{ __('Tax Settings') }}</flux:navlist.item>
-                </flux:navlist.group>
+                </flux:navlist.group> 
+                @endif
 
             </flux:navlist>
 
