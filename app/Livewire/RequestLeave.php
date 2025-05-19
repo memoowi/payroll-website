@@ -27,8 +27,12 @@ class RequestLeave extends Component
     {
         if ($id) {
             $this->isEditting = true;
-            $this->leaveRequestId = $id;
             $leaveRequest = LeaveRequest::find($id);
+            $this->leaveRequestId = $leaveRequest->id;
+            $this->leaveType = $leaveRequest->leave_type;
+            $this->startDate = $leaveRequest->start_date;
+            $this->endDate = $leaveRequest->end_date;
+            $this->reason = $leaveRequest->reason;
         }
         $this->modal('main-modal')->show();
     }
@@ -70,5 +74,26 @@ class RequestLeave extends Component
         Toaster::success('Leave request saved successfully!');
         $this->modal('main-modal')->close();
         $this->closeModal();
+        $this->resetPage();
+    }
+    public function openDeleteModal($id)
+    {
+        $this->leaveRequestId = $id;
+        $this->modal('delete-modal')->show();
+    }
+    public function deleteLeaveRequest()
+    {
+        $leaveRequest = LeaveRequest::find($this->leaveRequestId);
+        if($leaveRequest->status !== 'pending') {
+            Toaster::error('You can only delete leave requests on pending.');
+            $this->modal('delete-modal')->close();
+            $this->closeModal();
+            return;
+        }
+        $leaveRequest->delete();
+        Toaster::success('Leave request deleted successfully!');
+        $this->modal('delete-modal')->close();
+        $this->closeModal();
+        $this->resetPage();
     }
 }

@@ -5,6 +5,74 @@
         {{ __('Request Leave') }}
     </flux:button>
 
+    <div class="w-full overflow-x-auto mt-4">
+        <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-300 dark:divide-neutral-700">
+                    <thead class="bg-gray-50 dark:bg-neutral-800">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Leave Type
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase tracking-wider">
+                                From - To
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Created At
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-neutral-900 dark:divide-neutral-700">
+                        @forelse ($leaveRequests as $data)
+                            <tr class="hover:bg-gray-50 dark:hover:bg-neutral-800/30">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-neutral-200 capitalize">{{ $data->leave_type }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-400">
+                                    {{ \Carbon\Carbon::parse($data->start_date)->format('d M Y') }} - {{ \Carbon\Carbon::parse($data->end_date)->format('d M Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-400">
+                                    @if ($data->status == 'pending')
+                                        <flux:badge variant="pill" color="yellow">Pending</flux:badge>
+                                    @elseif ($data->status == 'approved')
+                                        <flux:badge variant="pill" color="green">Approved</flux:badge>
+                                    @elseif ($data->status == 'rejected')
+                                        <flux:badge variant="pill" color="red">Rejected</flux:badge>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-neutral-400 max-w-sm truncate">
+                                    {{ \Carbon\Carbon::parse($data->created_at)->format('d M Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
+                                    <flux:button icon="eye" variant="filled" type="button" class="w-fit" wire:click="openOvertimeModal({{ $data->id }})">
+                                        {{ __('View') }}
+                                    </flux:button>
+                                    @if ($data->status == 'pending')
+                                        <flux:button icon="pencil" variant="primary" type="button" class="w-fit" wire:click="openModal({{ $data->id }})">
+                                            {{ __('Edit') }}
+                                        </flux:button>
+                                    @endif
+                                    <flux:button icon="trash" variant="danger" type="button" class="w-fit" wire:click="openDeleteModal({{ $data->id }})">
+                                        {{ __('Delete') }}
+                                    </flux:button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-neutral-400">
+                                    You haven't made any leave requests yet.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -48,7 +116,7 @@
     {{-- Modal Delete --}}
     <flux:modal name="delete-modal" class="min-w-[22rem]" wire:close="closeModal">
         <form 
-            wire:submit="deleteOvertime"
+            wire:submit="deleteLeaveRequest"
         class="space-y-6">
             <div>
                 <flux:heading size="lg">Delete
