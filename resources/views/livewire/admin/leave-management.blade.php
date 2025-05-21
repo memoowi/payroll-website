@@ -82,6 +82,9 @@
             </div>
         </div>
     </div>
+    <div class="mt-4">
+        {{ $leaveRequests->links() }}
+    </div>
 
 
     {{-- View Modal --}}
