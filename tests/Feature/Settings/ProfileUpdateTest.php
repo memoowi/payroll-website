@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\CompanySetting;
 use App\Models\User;
 use Livewire\Volt\Volt;
 
 test('profile page is displayed', function () {
+    CompanySetting::factory()->create();
     $this->actingAs($user = User::factory()->create());
 
     $this->get('/settings/profile')->assertOk();
