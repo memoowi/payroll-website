@@ -195,14 +195,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                     <flux:checkbox.group wire:model="selectedAllowances" label="APPLY ALLOWANCES">
                         @foreach ($allowances as $allowance)
-                            <flux:checkbox value="{{ $allowance->id }}" label="{{ $allowance->name }}"
-                                description="{{ $allowance->description }}" />
+                            @unless ($allowance->applies_to_all == false)
+                                <flux:checkbox value="{{ $allowance->id }}" label="{{ $allowance->name }}"
+                                    description="{{ $allowance->description }}" />
+                            @endunless
                         @endforeach
                     </flux:checkbox.group>
                     <flux:checkbox.group wire:model="selectedDeductions" label="APPLY DEDUCTIONS">
                         @foreach ($deductions as $deduction)
-                            <flux:checkbox value="{{ $deduction->id }}" label="{{ $deduction->name }}"
-                                description="{{ $deduction->description }}" />
+                            @unless ($deduction->applies_to_all == false)
+                                <flux:checkbox value="{{ $deduction->id }}" label="{{ $deduction->name }}"
+                                    description="{{ $deduction->description }}" />
+                            @endunless
                         @endforeach
                     </flux:checkbox.group>
                 </div>
