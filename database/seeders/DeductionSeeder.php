@@ -33,6 +33,7 @@ class DeductionSeeder extends Seeder
                 'name' => 'Social Security Contribution',
                 'description' => 'Mandatory employee contribution to BPJS Ketenagakerjaan.',
                 'amount' => 100000,
+                'applies_to_all' => true,
             ],
             [
                 'name' => 'Violation of Dress Code',

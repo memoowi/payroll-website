@@ -20,6 +20,7 @@ class DeductionFactory extends Factory
             'name' => $this->faker->unique()->word() . ' Deduction',
             'description' => $this->faker->sentence(10),
             'amount' => $this->faker->randomFloat(2, 10000, 500000),
+            'applies_to_all' => $this->faker->boolean(),
         ];
     }
 }

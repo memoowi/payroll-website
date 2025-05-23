@@ -19,18 +19,21 @@ class AllowanceSeeder extends Seeder
                 'description' => 'Allowance provided for daily commuting expenses.',
                 'amount' => 500000,
                 'rule' => 'fixed',
+                'applies_to_all' => true
             ],
             [
                 'name' => 'Meal Allowance',
                 'description' => 'Daily meal stipend for employees.',
                 'amount' => 300000,
                 'rule' => 'fixed',
+                'applies_to_all' => true
             ],
             [
                 'name' => 'Housing Allowance',
                 'description' => 'Monthly housing support for eligible employees.',
                 'amount' => 1000000,
                 'rule' => 'fixed',
+                'applies_to_all' => true
             ],
             [
                 'name' => 'Performance Bonus',
@@ -49,6 +52,7 @@ class AllowanceSeeder extends Seeder
                 'description' => 'Allowance provided for employees who celebrate Hari Raya.',
                 'amount' => 0.8,
                 'rule' => 'percentage',
+                'applies_to_all' => true
             ]
         ];
 

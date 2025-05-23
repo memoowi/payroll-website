@@ -21,6 +21,7 @@ class AllowanceFactory extends Factory
             'description' => $this->faker->sentence(10),
             'amount' => $this->faker->randomFloat(2, 0, 1000000),
             'rule' => $this->faker->randomElement(['fixed', 'percentage']),
+            'applies_to_all' => $this->faker->boolean(),
         ];
     }
 }
