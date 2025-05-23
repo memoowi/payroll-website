@@ -134,7 +134,7 @@
                     ?
                 </flux:heading>
                 <flux:text class="mt-2">
-                    <p>You're about to delete this overtime.</p>
+                    <p>You're about to delete this leave request.</p>
                     <p>This action cannot be reversed.</p>
                 </flux:text>
             </div>
