@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->longText('description')->nullable();
             $table->decimal('amount', 15, 2)->default(0);
+            $table->boolean('applies_to_all')->default(false);
             $table->timestamps();
         });
     }

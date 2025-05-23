@@ -66,11 +66,11 @@
                                         {{ __('Edit') }}
                                     </flux:button>
                                     @if ($payroll->payrollDetails->isEmpty())
-                                        <flux:button icon="paper-airplane" variant="filled" type="button" class="w-fit"
-                                            wire:click="openGenerateModal({{ $payroll->id }})">
+                                        <flux:button icon="paper-airplane" variant="filled" type="button"
+                                            class="w-fit" wire:click="openGenerateModal({{ $payroll->id }})">
                                             {{ __('Generate') }}
                                         </flux:button>
-                                        
+
                                         <flux:button icon="trash" variant="danger" type="button" class="w-fit"
                                             wire:click="openDeleteModal({{ $payroll->id }})">
                                             {{ __('Delete') }}
@@ -150,5 +150,70 @@
                     Delete</flux:button>
             </div>
         </form>
+    </flux:modal>
+
+    {{-- Generate Modal --}}
+    <flux:modal wire:close="closeModal" name="generate-modal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">
+                    Generate Payroll
+                </flux:heading>
+                <flux:text class="mt-2">
+                    This will generate the payroll for all employees in this period.
+                    This action cannot be reversed.
+                </flux:text>
+            </div>
+
+            <flux:separator />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <flux:heading size="sm">Period</flux:heading>
+                    <flux:text class="mt-2">
+                        {{ \Carbon\Carbon::parse($periodStart)->format('d M Y') }} -
+                        {{ \Carbon\Carbon::parse($periodEnd)->format('d M Y') }}
+                    </flux:text>
+                </div>
+                <div>
+                    <flux:heading size="sm">Payment Date</flux:heading>
+                    <flux:text class="mt-2">
+                        {{ \Carbon\Carbon::parse($paymentDate)->format('d M Y') }}
+                    </flux:text>
+                </div>
+                <div>
+                    <flux:heading size="sm">Notes</flux:heading>
+                    <flux:text class="mt-2">
+                        {{ $notes }}
+                    </flux:text>
+                </div>
+            </div>
+
+            <flux:separator />
+
+            <form class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                    <flux:checkbox.group wire:model="selectedAllowances" label="APPLY ALLOWANCES">
+                        @foreach ($allowances as $allowance)
+                            <flux:checkbox value="{{ $allowance->id }}" label="{{ $allowance->name }}"
+                                description="{{ $allowance->description }}" />
+                        @endforeach
+                    </flux:checkbox.group>
+                    <flux:checkbox.group wire:model="selectedDeductions" label="APPLY DEDUCTIONS">
+                        @foreach ($deductions as $deduction)
+                            <flux:checkbox value="{{ $deduction->id }}" label="{{ $deduction->name }}"
+                                description="{{ $deduction->description }}" />
+                        @endforeach
+                    </flux:checkbox.group>
+                </div>
+
+                <flux:separator />
+
+                <div class="flex">
+                    <flux:spacer />
+                    <flux:button type="submit" variant="primary">Generate</flux:button>
+                </div>
+            </form>
+        </div>
     </flux:modal>
 </div>

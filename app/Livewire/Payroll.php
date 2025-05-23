@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\Allowance;
+use App\Models\Deduction;
 use App\Models\Payroll as ModelsPayroll;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -21,7 +23,9 @@ class Payroll extends Component
     public function render()
     {
         return view('livewire.admin.payroll',[
-            'payrolls' => ModelsPayroll::latest()->paginate(10)
+            'payrolls' => ModelsPayroll::latest()->paginate(10),
+            'allowances' => Allowance::all(),
+            'deductions' => Deduction::all(),
         ]);
     }
     public function closeModal()
@@ -89,5 +93,23 @@ class Payroll extends Component
         $this->closeModal();
         $this->modal('delete-modal')->close();
         $this->resetPage();
+    }
+    
+    // Generate Payroll Details
+    public $selectedAllowances = [];
+    public $selectedDeductions = [];
+    public function openGenerateModal($id)
+    {
+        $payroll = ModelsPayroll::find($id);
+        if (!$payroll) {
+            Toaster::error('Payroll not found!');
+            return;
+        }
+        $this->selectedPayrollId = $id;
+        $this->periodStart = $payroll->payroll_period_start;
+        $this->periodEnd = $payroll->payroll_period_end;
+        $this->paymentDate = $payroll->payment_date;
+        $this->notes = $payroll->notes;
+        $this->modal('generate-modal')->show();
     }
 }

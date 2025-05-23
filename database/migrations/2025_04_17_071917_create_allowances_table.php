@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->decimal('amount', 15, 2)->default(0);
             $table->enum('rule', ['fixed', 'percentage'])->default('fixed');
+            $table->boolean('applies_to_all')->default(false);
             $table->timestamps();
         });
     }
