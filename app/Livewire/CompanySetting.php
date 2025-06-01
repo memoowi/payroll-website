@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\CompanySetting as ModelsCompanySetting;
+use Carbon\Carbon;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -14,6 +15,9 @@ class CompanySetting extends Component
     public $address = '';
     public $phone = '';
     public $value = '';
+    public $checkInTime = '';
+    public $checkOutTime = '';
+    public $workingDays = '';
 
     public function mount()
     {
@@ -25,6 +29,9 @@ class CompanySetting extends Component
             $this->address = $companySetting->address;
             $this->phone = $companySetting->phone;
             $this->value = $companySetting->value;
+            $this->checkInTime = Carbon::parse($companySetting->check_in_time)->format('H:i');
+            $this->checkOutTime = Carbon::parse($companySetting->check_out_time)->format('H:i');
+            $this->workingDays = $companySetting->working_days;
         }
     }
     
@@ -41,6 +48,9 @@ class CompanySetting extends Component
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:255|min:5',
             'value' => 'nullable|string|max:255',
+            'checkInTime' => 'required|date_format:H:i',
+            'checkOutTime' => 'required|date_format:H:i',
+            'workingDays' => 'required|integer|min:1|max:7',
         ]);
 
         ModelsCompanySetting::updateOrCreate(
@@ -51,6 +61,9 @@ class CompanySetting extends Component
                 'address' => $this->address,
                 'phone' => $this->phone,
                 'value' => $this->value,
+                'check_in_time' => $this->checkInTime,
+                'check_out_time' => $this->checkOutTime,
+                'working_days' => $this->workingDays,
             ]
         );
 
@@ -66,6 +79,9 @@ class CompanySetting extends Component
             $this->address = $data->address;
             $this->phone = $data->phone;
             $this->value = $data->value;
+            $this->checkInTime = Carbon::parse($data->check_in_time)->format('H:i');
+            $this->checkOutTime = Carbon::parse($data->check_out_time)->format('H:i');
+            $this->workingDays = $data->working_days;
         } else {
             $this->reset();
         }

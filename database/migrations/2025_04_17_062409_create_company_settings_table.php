@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->text('value')->nullable();
+            $table->time('check_in_time');
+            $table->time('check_out_time');
+            $table->integer('working_days')->default(5); 
             $table->timestamps();
         });
     }
