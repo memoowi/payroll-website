@@ -191,7 +191,7 @@
 
             <flux:separator />
 
-            <form class="space-y-6">
+            <form wire:submit="generate" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                     <flux:checkbox.group wire:model="selectedAllowances" label="APPLY ALLOWANCES">
                         @foreach ($allowances as $allowance)

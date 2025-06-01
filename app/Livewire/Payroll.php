@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Allowance;
 use App\Models\Deduction;
+use App\Models\Employee;
 use App\Models\Payroll as ModelsPayroll;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -22,7 +24,7 @@ class Payroll extends Component
     #[Title('Payroll Management')]
     public function render()
     {
-        return view('livewire.admin.payroll',[
+        return view('livewire.admin.payroll', [
             'payrolls' => ModelsPayroll::latest()->paginate(10),
             'allowances' => Allowance::all(),
             'deductions' => Deduction::all(),
@@ -94,7 +96,7 @@ class Payroll extends Component
         $this->modal('delete-modal')->close();
         $this->resetPage();
     }
-    
+
     // Generate Payroll Details
     public $selectedAllowances = [];
     public $selectedDeductions = [];
@@ -111,5 +113,32 @@ class Payroll extends Component
         $this->paymentDate = $payroll->payment_date;
         $this->notes = $payroll->notes;
         $this->modal('generate-modal')->show();
+    }
+    public function generate()
+    {
+
+        try {
+            $this->validate([
+                'selectedAllowances' => 'array|exists:allowances,id',
+                'selectedDeductions' => 'array|exists:deductions,id',
+            ]);
+
+            $payroll = ModelsPayroll::find($this->selectedPayrollId);
+            if (!$payroll) {
+                Toaster::error('Payroll not found!');
+                return;
+            }
+            DB::beginTransaction();
+            // dd($this->selectedAllowances, $this->selectedDeductions);
+
+            // Loop through each employee and calculate their payroll details
+
+            
+            Toaster::success('Payroll details generated successfully!');
+            $this->modal('generate-modal')->close();
+        } catch (\Exception $e) {
+            Toaster::error('Error generating payroll details: ' . $e->getMessage());
+            DB::rollBack();
+        }
     }
 }
