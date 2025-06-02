@@ -12,10 +12,10 @@
         <flux:input wire:model="checkOutTime" label="Check Out Time" type="time" required
             autocomplete="check-out-time" />
         <flux:radio.group wire:model="workingDays" label="Working Days" variant="segmented">
-            <flux:radio label="1" value="1" />
+            {{-- <flux:radio label="1" value="1" />
             <flux:radio label="2" value="2" />
             <flux:radio label="3" value="3" />
-            <flux:radio label="4" value="4" />
+            <flux:radio label="4" value="4" /> --}}
             <flux:radio label="5" value="5" />
             <flux:radio label="6" value="6" />
             <flux:radio label="7" value="7" />

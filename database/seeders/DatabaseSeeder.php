@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             'address' => 'Jl. Raya No. 1, Jakarta',
             'phone' => '088232220652',
             'value' => 'Bersama Membangun Indonesia',
-            'check_in_time' => '08:00',
-            'check_out_time' => '17:00',
+            'check_in_time' => '07:00',
+            'check_out_time' => '15:00',
         ]);
 
         // $this->call([

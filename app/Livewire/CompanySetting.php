@@ -50,7 +50,7 @@ class CompanySetting extends Component
             'value' => 'nullable|string|max:255',
             'checkInTime' => 'required|date_format:H:i',
             'checkOutTime' => 'required|date_format:H:i',
-            'workingDays' => 'required|integer|min:1|max:7',
+            'workingDays' => 'required|integer|min:5|max:7',
         ]);
 
         ModelsCompanySetting::updateOrCreate(

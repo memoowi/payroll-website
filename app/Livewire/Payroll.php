@@ -3,10 +3,13 @@
 namespace App\Livewire;
 
 use App\Models\Allowance;
+use App\Models\CompanySetting;
 use App\Models\Deduction;
 use App\Models\Employee;
 use App\Models\Payroll as ModelsPayroll;
 use App\Models\Tax;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -130,7 +133,15 @@ class Payroll extends Component
                 Toaster::error('Payroll not found!');
                 return;
             }
-            
+
+            $companySetting = CompanySetting::first();
+            if (!$companySetting) {
+                Toaster::error('Company settings not found!');
+                return;
+            }
+            $checkInTime = $companySetting->check_in_time;
+            $workingDays = $companySetting->working_days;
+
             $employees = Employee::all();
 
             $fixedAllowances = Allowance::where('rule', 'fixed')->whereIn('id', $this->selectedAllowances)->get();
@@ -146,7 +157,7 @@ class Payroll extends Component
                 Toaster::error("'Late Arrival' deduction not found!");
                 return;
             }
-            if (!$absenceDeduction ) {
+            if (!$absenceDeduction) {
                 Toaster::error("'Absence Without Notice' deduction not found!");
                 return;
             }
@@ -167,16 +178,16 @@ class Payroll extends Component
                     'max' => (float)$thresholds[1],
                 ];
             });
-            
+
             // dd($taxes);
-            
+
             if ($employees->isEmpty()) {
                 Toaster::error('No employees found to generate payroll details.');
                 return;
             }
-            
+
             DB::beginTransaction();
-            
+
             // Loop through each employee and calculate their payroll details
             foreach ($employees as $employee) {
                 $basicSalary = $employee->salary->amount;
@@ -188,11 +199,107 @@ class Payroll extends Component
                     $totalAllowances += $allowance->amount * $basicSalary;
                 }
 
-                // Calculate total deductions
-                $totalDeductions = $deductions->sum('amount');
-
                 // Calculate total deductions based on employee's attendance
-                // Assuming attendance is 5 days a week
+                $calculatedLateDeductionAmount = 0;
+                $calculatedAbsenceWithoutNoticeDeductionAmount = 0;
+                $calculatedUnapprovedLeaveDeductionAmount = 0;
+
+                // LATE ARRIVAL
+                $attendance = $employee->attendances()
+                    ->whereBetween('attendance_date', [$payroll->payroll_period_start, $payroll->payroll_period_end])
+                    ->get();
+
+                foreach ($attendance as $record) {
+                    // Check for late arrivals
+                    if ($record->check_in && Carbon::parse($record->check_in)->gt(Carbon::parse($checkInTime))) {
+                        $calculatedLateDeductionAmount += $lateDeduction->amount;
+                    }
+                }
+
+                // ABSENCE WITHOUT NOTICE & UNAPPROVED LEAVE
+                $absenceWithoutNoticeDaysCount = 0;
+                $unapprovedLeaveRequestDaysCount = 0;
+
+                $periodIterator = CarbonPeriod::create($payroll->payroll_period_start, $payroll->payroll_period_end);
+                $expectedWorkDatesStrings = [];
+
+                foreach ($periodIterator as $date) {
+                    $isWorkingDay = false;
+                    if ($workingDays == 5 && $date->isWeekday()) { // Mon-Fri
+                        $isWorkingDay = true;
+                    } elseif ($workingDays == 6 && !$date->isSunday()) { // Mon-Sat
+                        $isWorkingDay = true;
+                    } elseif ($workingDays == 7) { // All days
+                        $isWorkingDay = true;
+                    }
+
+                    if ($isWorkingDay) {
+                        $expectedWorkDatesStrings[] = $date->toDateString();
+                    }
+                }
+
+                if (!empty($expectedWorkDatesStrings)) {
+                    $actualAttendanceDates = $employee->attendances()
+                        ->whereIn('attendance_date', $expectedWorkDatesStrings) 
+                        ->pluck('attendance_date')
+                        ->map(fn($attDate) => Carbon::parse($attDate)->toDateString())
+                        ->unique()->toArray();
+
+                    $employeeLeaveRequestsInPeriod = $employee->leaveRequests()
+                        ->where(function ($query) use ($payroll) {
+                            $query->where('start_date', '<=', $payroll->payroll_period_end)
+                                ->where('end_date', '>=', $payroll->payroll_period_start);
+                        })->get();
+
+                    foreach ($expectedWorkDatesStrings as $expectedDateStr) {
+                        $currentExpectedDate = Carbon::parse($expectedDateStr);
+
+                        // 1. Check if employee was present
+                        if (in_array($expectedDateStr, $actualAttendanceDates)) {
+                            continue; // Present, no absence deduction for this day
+                        }
+
+                        // Employee is ABSENT on this $expectedDateStr. Now check leave requests.
+                        $leaveStatusForDay = null; // null, 'approved', 'unapproved_request'
+
+                        foreach ($employeeLeaveRequestsInPeriod as $lr) {
+                            if ($currentExpectedDate->betweenIncluded(Carbon::parse($lr->start_date), Carbon::parse($lr->end_date))) {
+                                if ($lr->status === 'approved') {
+                                    $leaveStatusForDay = 'approved';
+                                    break; // Approved leave found, highest precedence for this check
+                                } elseif (in_array($lr->status, ['pending', 'rejected'])) {
+                                    $leaveStatusForDay = 'unapproved_request';
+                                    // Don't break, an approved one could still exist for this day (though unlikely)
+                                    // But if logic is that any non-approved request means "unapproved request day", this is fine.
+                                }
+                            }
+                        }
+
+                        if ($leaveStatusForDay === 'approved') {
+                            // On approved leave, so no penalty for "Absence Without Notice" or "Unapproved Leave Request"
+                            // (Potential for "Approved Unpaid Leave" deduction if that's a separate category and selected)
+                            continue;
+                        } elseif ($leaveStatusForDay === 'unapproved_request') {
+                            $unapprovedLeaveRequestDaysCount++;
+                        } else {
+                            // Absent, and no leave request (approved, pending, or rejected) covers this day
+                            $absenceWithoutNoticeDaysCount++;
+                        }
+                    }
+                }
+
+                dd($calculatedLateDeductionAmount,$absenceWithoutNoticeDaysCount, $unapprovedLeaveRequestDaysCount);
+
+                $calculatedAbsenceWithoutNoticeDeductionAmount = $absenceWithoutNoticeDaysCount * $absenceDeduction->amount;
+                $calculatedUnapprovedLeaveDeductionAmount = $unapprovedLeaveRequestDaysCount * $unapprovedLeaveDeduction->amount;
+
+                // Calculate fixed other deductions
+                $fixedOtherDeductionsAmount = $deductions->sum('amount');
+                // Calculate total deductions
+                $totalDeductions = $fixedOtherDeductionsAmount +
+                    $calculatedLateDeductionAmount +
+                    $calculatedAbsenceWithoutNoticeDeductionAmount +
+                    $calculatedUnapprovedLeaveDeductionAmount;
 
                 // Calculate total taxes based on basic salary
                 $totalTaxes = 0;
@@ -206,22 +313,23 @@ class Payroll extends Component
                 $netSalary = $grossSalary - ($totalDeductions + $totalTaxes);
 
                 // Create or update payroll details for the employee
-                $payrollDetail = $payroll->details()->updateOrCreate(
+                $payroll->payrollDetails()->updateOrCreate(
                     ['employee_id' => $employee->id],
                     [
                         'basic_salary' => $basicSalary,
                         'total_allowances' => $totalAllowances,
                         'gross_salary' => $grossSalary,
                         'total_deductions' => $totalDeductions,
+                        'total_taxes' => $totalTaxes,
                         'net_salary' => $netSalary,
                         'payment_status' => 'unpaid',
                     ]
                 );
             }
-            
+
             DB::commit();
 
-            
+
             Toaster::success('Payroll details generated successfully!');
             $this->modal('generate-modal')->close();
         } catch (\Exception $e) {
